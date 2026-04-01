@@ -3,9 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Xavier McClurkin — Portfolio</title>
+	<meta name="description" content="Portfolio of Xavier McClurkin, software developer focused on systems, game development, and design.">
+	<title>Xavier McClurkin | Software Developer</title>
 
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="icon" href="./res/favicon.ico" type="image/x-icon">
 
 	<!-- Bootstrap -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -19,64 +20,93 @@
 	<script src="app.js" defer></script>
 </head>
 <body>
+	<p style="display:none;">
+	Xavier McClurkin is a software developer specializing in game development and interactive systems.
+	</p>
 	
-	<div class="container wrapper">
-		<div class="row align-items-center w-100">
+	<main class="main-content">
+		<div class="container wrapper">
+			<div class="row align-items-center w-100">
 
-			<!-- CARD (LEFT) -->
-			 <div class="col-md-auto mx-auto mx-md-0 mb-3 mb-md-0 container frame mx-auto">
-
-  				<div class="profile-card text-center text-md-start col-md-auto mx-auto glass-card text-center text-md-start">
-			<!-- <div class="col-md-auto mx-auto mx-md-0 mb-3 mb-md-0 container">
-				<div class="profile-card text-center text-md-start col-md-auto mx-auto"> -->
+				<!-- CARD (LEFT) -->
+				<div class="col-md-auto mx-auto mx-md-0 mb-3 mb-md-0 container frame mx-auto">
 					<!-- <div class="card-banner">
 						<img src="https://placehold.co/600x200" alt="Banner">
 					</div> -->
 
-					<h1 class="mb-1">Xavier McClurkin</h1>
-					<p class="text-secondary subtitle">Computer Science Student</p>
+					<div class="profile-card text-center text-md-start col-md-auto mx-auto glass-card text-center text-md-start">
+						<p class="label">profile</p>
+						<h1 class="mb-1">Xavier McClurkin</h1>
+						<p class="text-secondary subtitle">Computer Science Student</p>
 
-					<p>
-					I build software and interactive systems with a focus on design and usability.
-					</p>
+						<!-- <p class="label">about</p> -->
+						<p>
+						I build software and interactive systems with a focus on design and usability.
+						</p>
 
-					<div class="icon-row mt-3 text-center text-md-start">
-						<a href="https://github.com/xavmcc3" target="_blank" aria-label="GitHub" title="GitHub">
-							<i class="bi bi-github"></i>
-						</a>
+						<div class="icon-row mt-3 text-center text-md-start">
+							<a href="https://github.com/xavmcc3" target="_blank" aria-label="GitHub" title="GitHub">
+								<i class="bi bi-github"></i>
+							</a>
 
-						<a href="https://www.linkedin.com/in/xavier-mcclurkin" target="_blank" aria-label="LinkedIn" title="LinkedIn">
-							<i class="bi bi-linkedin"></i>
-						</a>
+							<a href="https://www.linkedin.com/in/xavier-mcclurkin" target="_blank" aria-label="LinkedIn" title="LinkedIn">
+								<i class="bi bi-linkedin"></i>
+							</a>
 
-						<a href="mailto:xaviermcclurkin@gmail.com" aria-label="Email" title="Email">
-							<i class="bi bi-envelope"></i>
-						</a>
+							<a href="mailto:xaviermcclurkin@gmail.com" aria-label="Email" title="Email">
+								<i class="bi bi-envelope"></i>
+							</a>
+						</div>
+
+						<!-- <br> -->
+						
+						<p class="stamp">XM / 2026</p>
 					</div>
 
-					<br>
-					
-					<a href="resume.pdf" target="_blank" class="btn btn-custom">
+					<a href="./res/resume.pdf" target="_blank" class="btn btn-custom" style="margin-top: 1rem;">
 					View Resume
 					</a>
 				</div>
+
+				<!-- RIGHT CONTENT -->
+				<div class="col-md content text-center text-md-start">
+					<p class="label">projects</p>
+					<div class="project">
+						<a href="https://github.com/xavmcc3/js-game-engine" class="project-card">
+							<img src="thumb1.jpg" class="project-thumb" alt="">
+							<div>
+								<div class="project-title">Javascript Game Engine</div>
+								<div class="project-desc">A custom game engine built in JavaScript, designed to handle rendering, game loops, and modular game logic.</div>
+							</div>
+						</a>
+
+						<a href="https://github.com/xavmcc3/combat-game" class="project-card">
+							<img src="thumb1.jpg" class="project-thumb" alt="">
+							<div>
+								<div class="project-title">Combat Game Prototype</div>
+								<div class="project-desc">A gameplay-focused project built on custom systems exploring combat mechanics and player interaction.</div>
+							</div>
+						</a>
+
+						<a href="https://github.com/xavmcc3/image-to-ascii" class="project-card">
+							<img src="thumb1.jpg" class="project-thumb" alt="">
+							<div>
+								<div class="project-title">Image to ASCII Art Converter</div>
+								<div class="project-desc">A tool that transforms images into ASCII art by mapping pixel intensity to character density.</div>
+							</div>
+						</a>
+					</div>
+
+					<p class="label">skills</p>
+					<p class="skills-list">
+					Python / Java / C# / Godot /JavaScript<br>
+					HTML / CSS / Bootstrap
+					</p>
+				</div>
+
 			</div>
-
-			<!-- RIGHT CONTENT -->
-			<div class="col-md content text-center text-md-start">
-				<h5>Projects</h5>
-				<p>
-					<a href="#">Project One</a><br>
-					<a href="#">Project Two</a><br>
-					<a href="#">Project Three</a>
-				</p>
-
-				<h5>Skills</h5>
-				<p>Python • Java • C# • JavaScript • Godot • HTML/CSS</p>
-			</div>
-
 		</div>
-	</div>
+	</main>
 
 	<footer class="text-center py-3 footer">
 		<div>© 2026 Xavier McClurkin</div>

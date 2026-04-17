@@ -3,36 +3,62 @@ uniform vec2 uMouse;
 uniform vec2 uResolution;
 uniform float uCellSize;
 
-uniform sampler2D uTexture;   // your image
-uniform sampler2D uAtlas;     // ascii atlas
+uniform sampler2D uTexture;
+uniform sampler2D uAtlas;
 uniform float uCharCount;
+uniform vec2 uImageResolution;
+
+vec2 getCoverUV(vec2 uv, vec2 screen, vec2 image) {
+    float rs = screen.x / screen.y;
+    float ri = image.x / image.y;
+
+    vec2 newUV = uv;
+
+    if (rs > ri) {
+        // screen is wider → scale image height
+        float scale = ri / rs;
+        newUV.y = uv.y * scale + (1.0 - scale) * 0.5;
+    } else {
+        // screen is taller → scale image width
+        float scale = rs / ri;
+        newUV.x = uv.x * scale + (1.0 - scale) * 0.5;
+    }
+
+    return newUV;
+}
 
 void main() {
 	vec2 uv = gl_FragCoord.xy / uResolution;
 
-	// --- 🖱️ Mouse warp ---
-	vec2 dir = uv - uMouse;
-	float dist = length(dir);
-	uv += normalize(dir) * exp(-dist * 8.0) * 0.02;
-
-	// --- 🔲 Grid ---
 	vec2 pixel = gl_FragCoord.xy;
 	vec2 grid = floor(pixel / uCellSize);
+
+	vec2 snappedUV = (grid * uCellSize) / uResolution;
+
 	vec2 cellUV = fract(pixel / uCellSize);
 
+	vec2 sampleUV = getCoverUV(snappedUV, uResolution, uImageResolution);
+
 	// --- 🖼️ Sample image ONCE per cell ---
-	vec2 sampleUV = (grid * uCellSize) / uResolution;
+	// vec2 baseUV = (grid * uCellSize) / uResolution;
+	// vec2 sampleUV = getCoverUV(baseUV, uResolution, uImageResolution);
 	vec3 tex = texture2D(uTexture, sampleUV).rgb;
 
 	float brightness = dot(tex, vec3(0.299, 0.587, 0.114));
+
+	// --- 🖱️ Mouse shi ---
+	vec2 dir = uv - uMouse;
+	float dist = length(dir);
+	// uv += normalize(dir) * exp(-dist * 8.0) * 0.02;
 
 	// Add subtle noise for more texture
 	float noise = fract(sin(dot(grid, vec2(12.9898,78.233))) * 43758.5453);
 	brightness += (noise - 0.5) * 0.05;
 
 	// Add time-based gradient for dynamic effect
-	brightness += 0.4 * sin(uTime + grid.x * 0.1 + grid.y * 0.1) * exp(-dist * 4.0);
-	brightness = clamp(brightness, 0.0, 1.0);
+	// float sweep = fract(sampleUV.x + uTime * 0.1);
+	// float gradient = smoothstep(0.0, 0.3, sweep) * (1.0 - smoothstep(0.3, 0.6, sweep));
+	// brightness *= 0.8 + 0.4 * gradient;
 
 	// Contrast boost
 	brightness = pow(brightness, 0.8);
@@ -53,8 +79,10 @@ void main() {
 	vec3 color = tex * charSample;
 
 	// Fade based on mouse distance
-	// float mouseInfluence = exp(-dist * 5.0);
-	// color *= 0.8 + 0.2 * mouseInfluence;
+	float mouseInfluence = exp(-dist * 5.0);
+	color *= 0.8 + 0.2 * mouseInfluence;
 
 	gl_FragColor = vec4(color, 1.0);
+
+	// gl_FragColor = vec4(sampleUV, 0.0, 1.0);
 }

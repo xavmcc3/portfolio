@@ -54,7 +54,7 @@ async function getFragmentShader() {
 
 async function getASCIIImage() {
 	const loader = new THREE.TextureLoader();
-	const texture = await loader.loadAsync('./res/deleteme.jpg');
+	const texture = await loader.loadAsync('./res/wings.png');
 	return texture;
 }
 
@@ -89,6 +89,7 @@ function createAsciiAtlas() {
 }
 
 const atlas = createAsciiAtlas();
+const asciiImage = await getASCIIImage();
 
 const shaderMaterial = new THREE.ShaderMaterial({
   uniforms: {
@@ -100,8 +101,11 @@ const shaderMaterial = new THREE.ShaderMaterial({
 		) 
 	},
 
-	uCellSize: { value: 20.0 },
-	uTexture: { value: await getASCIIImage() },
+	uCellSize: { value: 3.0 },
+	uTexture: { value: asciiImage },
+	uImageResolution: {
+		value: new THREE.Vector2(asciiImage.image.width, asciiImage.image.height)
+	},
 	uAtlas: { value: atlas.texture },
 	uCharCount: { value: atlas.count }
   },

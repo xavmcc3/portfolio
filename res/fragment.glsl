@@ -42,9 +42,11 @@ void main() {
 	// --- 🖼️ Sample image ONCE per cell ---
 	// vec2 baseUV = (grid * uCellSize) / uResolution;
 	// vec2 sampleUV = getCoverUV(baseUV, uResolution, uImageResolution);
-	vec3 tex = texture2D(uTexture, sampleUV).rgb;
+	vec4 texSample = texture2D(uTexture, sampleUV);
+	vec3 tex = texSample.rgb;
+	float alpha = texSample.a;
 
-	float brightness = dot(tex, vec3(0.299, 0.587, 0.114));
+	float brightness = dot(tex, vec3(0.299, 0.587, 0.114)) * alpha;
 
 	// --- 🖱️ Mouse shi ---
 	vec2 dir = uv - uMouse;
@@ -56,9 +58,9 @@ void main() {
 	brightness += (noise - 0.5) * 0.05;
 
 	// Add time-based gradient for dynamic effect
-	// float sweep = fract(sampleUV.x + uTime * 0.1);
-	// float gradient = smoothstep(0.0, 0.3, sweep) * (1.0 - smoothstep(0.3, 0.6, sweep));
-	// brightness *= 0.8 + 0.4 * gradient;
+	float sweep = fract(uv.x + uTime * 0.1);
+	float band = smoothstep(0.0, 0.2, sweep) * (1.0 - smoothstep(0.2, 0.5, sweep));
+	brightness *= 0.8 + 0.4 * band;
 
 	// Contrast boost
 	brightness = pow(brightness, 0.8);
@@ -76,7 +78,8 @@ void main() {
 	float charSample = texture2D(uAtlas, atlasUV).r;
 
 	// --- 🎨 Color ---
-	vec3 color = tex * charSample;
+	float avgCharBrightness = (index + 0.5) / uCharCount;
+	vec3 color = vec3(avgCharBrightness, avgCharBrightness, avgCharBrightness) * charSample;
 
 	// Fade based on mouse distance
 	float mouseInfluence = exp(-dist * 5.0);

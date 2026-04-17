@@ -59,7 +59,7 @@ async function getASCIIImage() {
 }
 
 function createAsciiAtlas() {
-	const chars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'.".split('').reverse().join('');
+	const chars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. ".split('').reverse().join('');
 	const size = 64;
 	const cols = chars.length;
 

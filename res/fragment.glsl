@@ -31,36 +31,50 @@ void main() {
 	vec2 uv = gl_FragCoord.xy / uResolution;
 
 	vec2 pixel = gl_FragCoord.xy;
+
+	// mouse in pixel space
+	vec2 mousePx = uMouse * uResolution;
+
+	// direction + distance
+	vec2 dirM = pixel - mousePx;
+	float distM = length(dirM);
+
+	// falloff
+	float radius = 100.0;
+	float strength = 200.0;
+
+	// smooth falloff (strong near mouse, fades out)
+	float influence = exp(-distM / radius);
+
+	// push away
+	pixel -= normalize(dirM) * influence * strength;
+
 	vec2 grid = floor(pixel / uCellSize);
 
 	vec2 snappedUV = (grid * uCellSize) / uResolution;
 
 	vec2 cellUV = fract(pixel / uCellSize);
+	cellUV += dirM * influence * 0.01;
 
 	vec2 sampleUV = getCoverUV(snappedUV, uResolution, uImageResolution);
 
-	// --- 🖼️ Sample image ONCE per cell ---
-	// vec2 baseUV = (grid * uCellSize) / uResolution;
-	// vec2 sampleUV = getCoverUV(baseUV, uResolution, uImageResolution);
 	vec4 texSample = texture2D(uTexture, sampleUV);
 	vec3 tex = texSample.rgb;
 	float alpha = texSample.a;
 
 	float brightness = dot(tex, vec3(0.299, 0.587, 0.114)) * alpha;
 
-	// --- 🖱️ Mouse shi ---
 	vec2 dir = uv - uMouse;
 	float dist = length(dir);
-	// uv += normalize(dir) * exp(-dist * 8.0) * 0.02;
 
 	// Add subtle noise for more texture
 	float noise = fract(sin(dot(grid, vec2(12.9898,78.233))) * 43758.5453);
 	brightness += (noise - 0.5) * 0.05;
 
 	// Add time-based gradient for dynamic effect
-	float sweep = fract(uv.x + uTime * 0.1);
-	float band = smoothstep(0.0, 0.2, sweep) * (1.0 - smoothstep(0.2, 0.5, sweep));
-	brightness *= 0.8 + 0.4 * band;
+	// float sweep = fract(uv.x + uTime * 0.1);
+	// float band = smoothstep(0.0, 0.2, sweep) * (1.0 - smoothstep(0.2, 0.5, sweep));
+	// brightness *= 0.8 + 0.4 * band;
 
 	// Contrast boost
 	brightness = pow(brightness, 0.8);

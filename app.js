@@ -54,7 +54,7 @@ async function getFragmentShader() {
 
 async function getASCIIImage() {
 	const loader = new THREE.TextureLoader();
-	const texture = await loader.loadAsync('./res/wings.png');
+	const texture = await loader.loadAsync('./res/deleteme.jpg');
 	return texture;
 }
 
@@ -101,7 +101,7 @@ const shaderMaterial = new THREE.ShaderMaterial({
 		) 
 	},
 
-	uCellSize: { value: 3.0 },
+	uCellSize: { value: 10.0 },
 	uTexture: { value: asciiImage },
 	uImageResolution: {
 		value: new THREE.Vector2(asciiImage.image.width, asciiImage.image.height)

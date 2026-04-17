@@ -39,6 +39,57 @@ window.addEventListener('mousemove', (e) => {
 const planeGeo = new THREE.PlaneGeometry(2, 2);
 
 // Build shader material
+const defaultVertexShader = `
+void main() {
+	gl_Position = vec4(position, 1.0);
+}
+`
+
+async function getFragmentShader() {
+    const response = await fetch('./res/fragment.glsl');
+    const fragmentCode = await response.text();
+
+    return fragmentCode;
+}
+
+async function getASCIIImage() {
+	const loader = new THREE.TextureLoader();
+	const texture = await loader.loadAsync('./res/deleteme.jpg');
+	return texture;
+}
+
+function createAsciiAtlas() {
+	const chars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'.".split('').reverse().join('');
+	const size = 64;
+	const cols = chars.length;
+
+	const canvas = document.createElement('canvas');
+	canvas.width = size * cols;
+	canvas.height = size;
+
+	const ctx = canvas.getContext('2d');
+
+	ctx.fillStyle = "black";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+	ctx.fillStyle = "white";
+	ctx.font = `${size * 0.8}px monospace`;
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+
+	for (let i = 0; i < chars.length; i++) {
+	ctx.fillText(chars[i], i * size + size / 2, size / 2);
+	}
+
+	const texture = new THREE.CanvasTexture(canvas);
+	texture.minFilter = THREE.NearestFilter;
+	texture.magFilter = THREE.NearestFilter;
+
+	return { texture, count: chars.length };
+}
+
+const atlas = createAsciiAtlas();
+
 const shaderMaterial = new THREE.ShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
@@ -47,37 +98,19 @@ const shaderMaterial = new THREE.ShaderMaterial({
 			window.innerWidth * renderer.getPixelRatio(),
 			window.innerHeight * renderer.getPixelRatio()
 		) 
-	}
+	},
+
+	uCellSize: { value: 20.0 },
+	uTexture: { value: await getASCIIImage() },
+	uAtlas: { value: atlas.texture },
+	uCharCount: { value: atlas.count }
   },
-  vertexShader: `
-    void main() {
-      gl_Position = vec4(position, 1.0);
-    }
-  `,
-  fragmentShader: `
-    uniform float uTime;
-    uniform vec2 uMouse;
-    uniform vec2 uResolution;
-
-    void main() {
-      vec2 uv = gl_FragCoord.xy / uResolution;
-
-      // visualize mouse influence
-      float d = distance(uv, uMouse);
-
-      float glow = exp(-10.0 * d);
-
-      vec3 color = vec3(glow);
-
-      gl_FragColor = vec4(color, 1.0);
-
-	  // DEBUG: visualize UVs
-	  gl_FragColor = vec4(uv, 0.0, 1.0);
-    }
-  `,
+  vertexShader: defaultVertexShader,
+  fragmentShader: await getFragmentShader(),
   depthWrite: false,
   depthTest: false
 });
+
 
 // Build plane
 const plane = new THREE.Mesh(planeGeo, shaderMaterial);

@@ -47,7 +47,7 @@ body::before {
 	pointer-events: none;
 	overflow: hidden;
 	z-index: -1;
-	/* opacity: 0.3; */
+	opacity: 0.2;
 }
 
 #background-image-render::after {
@@ -59,7 +59,7 @@ body::before {
 	height: 100%;
 	pointer-events: none;
 	overflow: hidden;
-	background: linear-gradient(to bottom, #00000000 90%, #000000c2);
+	background: linear-gradient(to bottom, #00000000 90%, #000000);
 }
 
 .main-content {

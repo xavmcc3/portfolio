@@ -6,7 +6,13 @@
 	<meta name="description" content="Portfolio of Xavier McClurkin, software developer focused on systems, game development, and design.">
 	<title>Xavier McClurkin | Software Developer</title>
 
-	<link rel="icon" href="./res/favicon.ico" type="image/x-icon">
+	<!-- Favicon -->
+	<link rel="icon" type="image/png" href="/res/favicon/favicon-96x96.png?v=20260416" sizes="96x96" />
+	<link rel="icon" type="image/svg+xml" href="/res/favicon/favicon.svg?v=20260416" />
+	<link rel="shortcut icon" href="/res/favicon/favicon.ico?v=20260416" />
+	<link rel="apple-touch-icon" sizes="180x180" href="/res/favicon/apple-touch-icon.png?v=20260416" />
+	<meta name="apple-mobile-web-app-title" content="Xavier McClurkin" />
+	<link rel="manifest" href="/res/favicon/site.webmanifest?v=20260416" />
 
 	<!-- Bootstrap -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -15,18 +21,29 @@
 	<!-- Icons CDN -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-	<!-- Custom Styles and Behavior -->
+	<!-- Custom Styles -->
 	<link rel="stylesheet" href="style.css">
-	<script src="app.js" defer></script>
+
+	<!-- Importmaps and Modules -->
+	 <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+        }
+      }
+    </script>
+	 <script type="module" src="app.js" defer></script>
 </head>
 <body>
 	<p style="display:none;">
 	Xavier McClurkin is a software developer specializing in game development and interactive systems.
 	</p>
 
-	<!-- <div id="background-image-render">
-		<img src="res/wings.png" alt="decorative background" id="background-image" class="background-image">
-	</div> -->
+	<div id="background-image-render">
+		<canvas id="bg"></canvas>
+		<!-- <img src="res/wings.png" alt="decorative background" id="background-image" class="background-image"> -->
+	</div>
 	
 	<main class="main-content">
 		<div class="container wrapper">

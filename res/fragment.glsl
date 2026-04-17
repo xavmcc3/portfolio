@@ -80,7 +80,7 @@ void main() {
 	brightness *= 0.8 + 0.4 * band;
 
 	// Contrast boost
-	brightness = pow(brightness, 0.8);
+	brightness = pow(brightness, 0.9);
 
 	// --- 🔤 Map brightness → character index ---
 	float index = floor(brightness * (uCharCount - 1.0));

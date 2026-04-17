@@ -18,14 +18,6 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-
-// Set up scene
-// const geometry = new THREE.BoxGeometry();
-// const material = new THREE.MeshBasicMaterial({ wireframe: true });
-// const cube = new THREE.Mesh(geometry, material);
-
-// scene.add(cube);
-
 // Track mouse
 const targetMouse = new THREE.Vector2(0.5, 0.5);
 const mouseVelocity = new THREE.Vector2(0, 0);
@@ -91,7 +83,7 @@ async function getFragmentShader() {
 
 async function getASCIIImage() {
 	const loader = new THREE.TextureLoader();
-	const texture = await loader.loadAsync('./res/wings.png');
+	const texture = await loader.loadAsync('./res/background-pre-ascii.png');
 	return texture;
 }
 
@@ -138,7 +130,7 @@ const shaderMaterial = new THREE.ShaderMaterial({
 		) 
 	},
 
-	uCellSize: { value: 10.0 },
+	uCellSize: { value: 15.0 },
 	uTexture: { value: asciiImage },
 	uImageResolution: {
 		value: new THREE.Vector2(asciiImage.image.width, asciiImage.image.height)

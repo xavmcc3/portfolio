@@ -43,6 +43,9 @@ void main() {
 	float radius = 100.0;
 	float strength = 200.0;
 
+	strength += sin(uTime) * 50.0;
+	radius += cos(uTime * 0.5) * 50.0;
+
 	// smooth falloff (strong near mouse, fades out)
 	float influence = exp(-distM / radius);
 
@@ -72,9 +75,9 @@ void main() {
 	brightness += (noise - 0.5) * 0.05;
 
 	// Add time-based gradient for dynamic effect
-	// float sweep = fract(uv.x + uTime * 0.1);
-	// float band = smoothstep(0.0, 0.2, sweep) * (1.0 - smoothstep(0.2, 0.5, sweep));
-	// brightness *= 0.8 + 0.4 * band;
+	float sweep = fract(uv.x + uTime * 0.1);
+	float band = smoothstep(0.0, 0.2, sweep) * (1.0 - smoothstep(0.2, 0.5, sweep));
+	brightness *= 0.8 + 0.4 * band;
 
 	// Contrast boost
 	brightness = pow(brightness, 0.8);

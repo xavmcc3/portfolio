@@ -20,21 +20,58 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 
 // Set up scene
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ wireframe: true });
-const cube = new THREE.Mesh(geometry, material);
+// const geometry = new THREE.BoxGeometry();
+// const material = new THREE.MeshBasicMaterial({ wireframe: true });
+// const cube = new THREE.Mesh(geometry, material);
 
 // scene.add(cube);
 
 // Track mouse
+const targetMouse = new THREE.Vector2(0.5, 0.5);
+const mouseVelocity = new THREE.Vector2(0, 0);
 const mouse = new THREE.Vector2(0.5, 0.5);
+
+
+const STIFFNESS = 0.15;
+const DAMPING = 0.8;
+
+function lerp(a, b, t) {
+	return a + (b - a) * t;
+}
+
+function updateMouse() {
+	mouseVelocity.x += (targetMouse.x - mouse.x) * STIFFNESS;
+	mouseVelocity.y += (targetMouse.y - mouse.y) * STIFFNESS;
+
+	mouseVelocity.x *= DAMPING;
+	mouseVelocity.y *= DAMPING;
+
+	mouse.x += mouseVelocity.x;
+	mouse.y += mouseVelocity.y;
+}
 
 window.addEventListener('mousemove', (e) => {
 	const rect = canvas.getBoundingClientRect();
 
-	mouse.x = (e.clientX - rect.left) / rect.width;
-	mouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
+	targetMouse.x = (e.clientX - rect.left) / rect.width;
+	targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
 });
+
+canvas.addEventListener("touchstart", (e) => {
+	const rect = canvas.getBoundingClientRect();
+	const touch = e.touches[0];
+
+	targetMouse.x = (touch.clientX - rect.left) / rect.width;
+	targetMouse.y = 1.0 - (touch.clientY - rect.top) / rect.height;
+}, { passive: true });
+
+canvas.addEventListener("touchmove", (e) => {
+	const rect = canvas.getBoundingClientRect();
+	const touch = e.touches[0];
+
+	targetMouse.x = (touch.clientX - rect.left) / rect.width;
+	targetMouse.y = 1.0 - (touch.clientY - rect.top) / rect.height;
+}, { passive: true });
 
 const planeGeo = new THREE.PlaneGeometry(2, 2);
 
@@ -54,7 +91,7 @@ async function getFragmentShader() {
 
 async function getASCIIImage() {
 	const loader = new THREE.TextureLoader();
-	const texture = await loader.loadAsync('./res/deleteme.jpg');
+	const texture = await loader.loadAsync('./res/wings.png');
 	return texture;
 }
 
@@ -129,11 +166,13 @@ function animate() {
 	requestAnimationFrame(animate);
 
 	const elapsed = (performance.now() - startTime) / 1000;
-
+	
 	shaderMaterial.uniforms.uTime.value = elapsed;
+	
+	// cube.rotation.x += 0.01;
+	// cube.rotation.y += 0.01;
 
-	cube.rotation.x += 0.01;
-	cube.rotation.y += 0.01;
+	updateMouse();
 
 	renderer.render(scene, camera);
 }
@@ -148,9 +187,12 @@ function onResize() {
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
 
+	
 	renderer.setSize(width, height);
-
+	
 	const pixelRatio = renderer.getPixelRatio();
+	
+	// gl.uniform2f(uMouseLocation, mouse.x, mouse.y);
 
 	shaderMaterial.uniforms.uResolution.value.set(
 		window.innerWidth * pixelRatio,
